@@ -1,0 +1,39 @@
+{
+  "name": "appcd-plugin-titanium-sdk",
+  "version": "1.0.0",
+  "description": "Titanium SDK service for the Appc Daemon.",
+  "main": "./dist/index",
+  "author": "Appcelerator, Inc. <npmjs@appcelerator.com>",
+  "maintainers": [
+    "Chris Barber <cbarber@appcelerator.com>"
+  ],
+  "license": "Apache-2.0",
+  "scripts": {
+    "build": "gulp build",
+    "coverage": "gulp coverage",
+    "docs": "gulp docs",
+    "prepare": "gulp build",
+    "test": "gulp test"
+  },
+  "dependencies": {
+    "gawk": "^4.4.5",
+    "sort-object-keys": "^1.1.2",
+    "source-map-support": "^0.5.0"
+  },
+  "devDependencies": {
+    "appcd-gulp": "^1.0.1",
+    "gulp": "^3.9.1"
+  },
+  "homepage": "https://github.com/appcelerator/appcd-plugin-titanium-sdk#readme",
+  "bugs": "https://github.com/appcelerator/appcd-plugin-titanium-sdk/issues",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/appcelerator/appcd-plugin-titanium-sdk.git"
+  },
+  "appcd": {
+    "appcdVersion": "1.x",
+    "config": "./conf/config.js",
+    "name": "titanium-sdk",
+    "type": "external"
+  }
+}
