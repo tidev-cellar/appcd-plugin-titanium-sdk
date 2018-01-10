@@ -101,7 +101,6 @@ class TitaniumModule {
 			throw new Error('Directory does not exist');
 		}
 
-		this.manifest = {};
 		this.path     = dir;
 		this.platform = path.basename(path.dirname(path.dirname(dir)));
 		this.version  = path.basename(dir);
@@ -112,16 +111,13 @@ class TitaniumModule {
 			for (const line of fs.readFileSync(manifestFile, 'utf8').split(/\r?\n/)) {
 				const m = line.match(iniRegExp);
 				if (m) {
-					this.manifest[m[1]] = m[2];
+					this[m[1]] = m[2];
 				}
 			}
 		} catch (e) {
 			throw new Error('Directory does not contain a valid manifest');
 		}
 
-		if (this.manifest.platform) {
-			this.platform = this.manifest.platform;
-		}
 		if (this.platform === 'iphone') {
 			this.platform = 'ios';
 		}
@@ -129,9 +125,6 @@ class TitaniumModule {
 			throw new Error('Unable to determine module platform');
 		}
 
-		if (this.manifest.version) {
-			this.version = this.manifest.version;
-		}
 		if (!this.version) {
 			throw new Error('Unable to determine module version');
 		}
@@ -194,13 +187,19 @@ export default class TitaniumInfoService extends DataServiceDispatcher {
 				if (!modules[module.platform]) {
 					modules[module.platform] = {};
 				}
-				modules[module.platform][module.version] = module;
+				if (!modules[module.platform][module.moduleid]) {
+					modules[module.platform][module.moduleid] = {};
+				}
+				modules[module.platform][module.moduleid][module.version] = module;
 			}
 
 			// sort the platforms and versions
 			modules = sortObject(modules);
 			for (const platform of Object.keys(modules)) {
-				modules[platform] = sortObject(modules[platform], version.compare);
+				modules[platform] = sortObject(modules[platform]);
+				for (const id of Object.keys(modules[platform])) {
+					modules[platform][id] = sortObject(modules[platform][id], version.compare);
+				}
 			}
 
 			gawk.set(this.data.modules, modules);
