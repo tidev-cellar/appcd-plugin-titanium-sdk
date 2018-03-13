@@ -151,6 +151,12 @@ ansi-wrap@0.1.0:
   version "0.1.0"
   resolved "https://registry.npmjs.org/ansi-wrap/-/ansi-wrap-0.1.0.tgz#a82250ddb0015e9a27ca82e82ea603bbfa45efaf"
 
+appcd-fs@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/appcd-fs/-/appcd-fs-1.0.1.tgz#2b941d0d81054d43515e5daef7806fc8e32e28db"
+  dependencies:
+    source-map-support "^0.5.0"
+
 appcd-gulp@^1.0.1:
   version "1.0.1"
   resolved "https://registry.npmjs.org/appcd-gulp/-/appcd-gulp-1.0.1.tgz#b8f53b1c622de9e88169e381ec39ff701465c2fd"
@@ -191,6 +197,12 @@ appcd-gulp@^1.0.1:
     nyc "^11.3.0"
     sinon "^4.1.2"
     sinon-chai "^2.14.0"
+
+appcd-path@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/appcd-path/-/appcd-path-1.0.1.tgz#33f280b9a5ea69d8ca871485407cb73080d5f1d6"
+  dependencies:
+    source-map-support "^0.5.0"
 
 append-transform@^0.4.0:
   version "0.4.0"
@@ -4426,6 +4438,13 @@ tildify@^1.0.0, tildify@^1.1.2:
 time-stamp@^1.0.0:
   version "1.1.0"
   resolved "https://registry.npmjs.org/time-stamp/-/time-stamp-1.1.0.tgz#764a5a11af50561921b133f3b44e618687e0f5c3"
+
+titaniumlib@^0.0.0:
+  version "0.0.0"
+  resolved "https://registry.yarnpkg.com/titaniumlib/-/titaniumlib-0.0.0.tgz#9ba7cd3e4e1427b5cd430860ed9617db395f6579"
+  dependencies:
+    appcd-fs "^1.0.1"
+    appcd-path "^1.0.1"
 
 tmp@^0.0.33:
   version "0.0.33"

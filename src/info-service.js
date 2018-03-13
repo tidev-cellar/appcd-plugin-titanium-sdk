@@ -1,136 +1,15 @@
 import DetectEngine from 'appcd-detect';
-import fs from 'fs';
 import gawk from 'gawk';
-import path from 'path';
 import sortObject from 'sort-object-keys';
 import version from './version';
 
 import { DataServiceDispatcher } from 'appcd-dispatcher';
-import { expandPath } from 'appcd-path';
-import { isDir } from 'appcd-fs';
-
-/**
- * Common search paths for Titanium SDKs.
- * @type {Object}
- */
-const sdkLocations = {
-	darwin: [
-		'~/Library/Application Support/Titanium',
-		'/Library/Application Support/Titanium'
-	],
-	linux: [
-		'~/.titanium'
-	],
-	win32: [
-		'%ProgramData%\\Titanium',
-		'%APPDATA%\\Titanium',
-		'%ALLUSERSPROFILE%\\Application Data\\Titanium'
-	]
-};
-
-/**
- * ?
- * @type {Object}
- */
-const osNames = {
-	darwin: 'osx',
-	linux: 'linux',
-	win32: 'win32'
-};
-
-/**
- * Titanium SDK information object.
- */
-class TitaniumSDK {
-	/**
-	 * Checks if the specified directory contains a Titanium SDK, then parses the SDK's
-	 * `manifest.json`.
-	 *
-	 * @param {String} dir - The directory to scan.
-	 * @access public
-	 */
-	constructor(dir) {
-		if (typeof dir !== 'string' || !dir) {
-			throw new TypeError('Expected directory to be a valid string');
-		}
-
-		dir = expandPath(dir);
-		if (!isDir(dir)) {
-			throw new Error('Directory does not exist');
-		}
-
-		this.name     = path.basename(dir);
-		this.manifest = null;
-		this.path     = dir;
-
-		try {
-			const manifestFile = path.join(dir, 'manifest.json');
-			this.manifest = JSON.parse(fs.readFileSync(manifestFile));
-			if (!this.manifest || typeof this.manifest !== 'object') {
-				throw new Error();
-			}
-		} catch (e) {
-			throw new Error('Directory does not contain a valid manifest.json');
-		}
-	}
-}
-
-/**
- * Cached regex for matching key/values in properties files.
- * @type {RegExp}
- */
-const iniRegExp = /^(?!\s*#)\s*([^:\s]+)\s*:\s*(.+?)\s*$/;
-
-/**
- * Titanium Module information object.
- */
-class TitaniumModule {
-	/**
-	 * Checks if the specified directory contains a Titanium Module.
-	 *
-	 * @param {String} dir - The directory to scan.
-	 * @access public
-	 */
-	constructor(dir) {
-		if (typeof dir !== 'string' || !dir) {
-			throw new TypeError('Expected directory to be a valid string');
-		}
-
-		dir = expandPath(dir);
-		if (!isDir(dir)) {
-			throw new Error('Directory does not exist');
-		}
-
-		this.path     = dir;
-		this.platform = path.basename(path.dirname(path.dirname(dir)));
-		this.version  = path.basename(dir);
-
-		try {
-			const manifestFile = path.join(dir, 'manifest');
-
-			for (const line of fs.readFileSync(manifestFile, 'utf8').split(/\r?\n/)) {
-				const m = line.match(iniRegExp);
-				if (m) {
-					this[m[1]] = m[2];
-				}
-			}
-		} catch (e) {
-			throw new Error('Directory does not contain a valid manifest');
-		}
-
-		if (this.platform === 'iphone') {
-			this.platform = 'ios';
-		}
-		if (!this.platform) {
-			throw new Error('Unable to determine module platform');
-		}
-
-		if (!this.version) {
-			throw new Error('Unable to determine module version');
-		}
-	}
-}
-
+import {
+	modules,
+	sdk,
+	TitaniumModule,
+	TitaniumSDK,
+} from 'titaniumlib';
 /**
  * The Titanium SDK info service.
  */
@@ -172,7 +51,7 @@ export default class TitaniumInfoService extends DataServiceDispatcher {
 			depth:               3,
 			multiple:            true,
 			name:                'titanium-sdk:modules',
-			paths:               sdkLocations[process.platform].map(dir => expandPath(dir, 'modules')),
+			paths:               modules.locations[process.platform],
 			recursive:           true,
 			recursiveWatchDepth: 0,
 			redetect:            true,
@@ -226,9 +105,7 @@ export default class TitaniumInfoService extends DataServiceDispatcher {
 			depth:    1,
 			multiple: true,
 			name:     'titanium-sdk:sdks',
-			paths: sdkLocations[process.platform].map(dir => {
-				return expandPath(dir, 'mobilesdk', osNames[process.platform]);
-			}),
+			paths: sdk.locations[process.platform],
 			processResults(results) {
 				results.sort((a, b) => {
 					return version.compare(
