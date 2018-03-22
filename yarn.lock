@@ -204,6 +204,15 @@ appcd-path@^1.0.1:
   dependencies:
     source-map-support "^0.5.0"
 
+appcd-util@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/appcd-util/-/appcd-util-1.0.1.tgz#f2be2d5894ebb6cc82ae356f63df19edc5fa5f9e"
+  dependencies:
+    appcd-fs "^1.0.1"
+    lodash.get "^4.4.2"
+    semver "^5.4.1"
+    source-map-support "^0.5.0"
+
 append-transform@^0.4.0:
   version "0.4.0"
   resolved "https://registry.npmjs.org/append-transform/-/append-transform-0.4.0.tgz#d76ebf8ca94d276e247a36bad44a4b74ab611991"
@@ -4045,6 +4054,10 @@ semver@^4.1.0:
   version "4.3.6"
   resolved "https://registry.npmjs.org/semver/-/semver-4.3.6.tgz#300bc6e0e86374f7ba61068b5b1ecd57fc6532da"
 
+semver@^5.4.1, semver@^5.5.0:
+  version "5.5.0"
+  resolved "https://registry.yarnpkg.com/semver/-/semver-5.5.0.tgz#dc4bbc7a6ca9d916dee5d43516f0092b58f7b8ab"
+
 sequencify@~0.0.7:
   version "0.0.7"
   resolved "https://registry.npmjs.org/sequencify/-/sequencify-0.0.7.tgz#90cff19d02e07027fd767f5ead3e7b95d1e7380c"
@@ -4439,12 +4452,14 @@ time-stamp@^1.0.0:
   version "1.1.0"
   resolved "https://registry.npmjs.org/time-stamp/-/time-stamp-1.1.0.tgz#764a5a11af50561921b133f3b44e618687e0f5c3"
 
-titaniumlib@^0.0.0:
-  version "0.0.0"
-  resolved "https://registry.yarnpkg.com/titaniumlib/-/titaniumlib-0.0.0.tgz#9ba7cd3e4e1427b5cd430860ed9617db395f6579"
+titaniumlib@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/titaniumlib/-/titaniumlib-1.0.0.tgz#19b79157bddb11b76124365b7279ff7c8b53ea30"
   dependencies:
     appcd-fs "^1.0.1"
     appcd-path "^1.0.1"
+    appcd-util "^1.0.1"
+    semver "^5.5.0"
 
 tmp@^0.0.33:
   version "0.0.33"

@@ -3,9 +3,11 @@ if (!Error.prepareStackTrace) {
 	require('source-map-support/register');
 }
 
-import TitaniumInfoService from './info-service';
+import ModuleService from './module-service';
+import SDKService from './sdk-service';
 
-const info = new TitaniumInfoService();
+const moduleSvc = new ModuleService();
+const sdkSvc = new SDKService();
 
 /**
  * Wires up plugin services.
@@ -14,8 +16,11 @@ const info = new TitaniumInfoService();
  * @returns {Promise}
  */
 export async function activate(cfg) {
-	await info.activate(cfg);
-	appcd.register('/info', info);
+	await moduleSvc.activate(cfg);
+	appcd.register('/module', moduleSvc);
+
+	await sdkSvc.activate(cfg);
+	appcd.register('/sdk', sdkSvc);
 }
 
 /**
@@ -24,5 +29,6 @@ export async function activate(cfg) {
  * @returns {Promise}
  */
 export async function deactivate() {
-	await info.deactivate();
+	await moduleSvc.deactivate();
+	await sdkSvc.deactivate();
 }
