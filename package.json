@@ -19,7 +19,7 @@
     "gawk": "^4.4.5",
     "sort-object-keys": "^1.1.2",
     "source-map-support": "^0.5.4",
-    "titaniumlib": "^0.0.0"
+    "titaniumlib": "^1.0.0"
   },
   "devDependencies": {
     "appcd-gulp": "^1.0.1",
