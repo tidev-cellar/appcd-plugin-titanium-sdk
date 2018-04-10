@@ -17,35 +17,35 @@ function format(ver, min, max, chopDash) {
 	return ver.join('.');
 }
 
-function eq(v1, v2) {
+export function eq(v1, v2) {
 	return semver.eq(format(v1, 3, 3), format(v2, 3, 3));
 }
 
-function gte(v1, v2) {
+export function gte(v1, v2) {
 	return semver.gte(format(v1, 3, 3), format(v2, 3, 3));
 }
 
-function gt(v1, v2) {
+export function gt(v1, v2) {
 	return semver.gt(format(v1, 3, 3), format(v2, 3, 3));
 }
 
-function lte(v1, v2) {
+export function lte(v1, v2) {
 	return semver.lte(format(v1, 3, 3), format(v2, 3, 3));
 }
 
-function lt(v1, v2) {
+export function lt(v1, v2) {
 	return semver.lt(format(v1, 3, 3), format(v2, 3, 3));
 }
 
-function compare(v1, v2) {
+export function compare(v1, v2) {
 	return eq(v1, v2) ? 0 : lt(v1, v2) ? -1 : 1;
 }
 
-function rcompare(v1, v2) {
+export function rcompare(v1, v2) {
 	return eq(v1, v2) ? 0 : lt(v1, v2) ? 1 : -1;
 }
 
-function satisfies(ver, str) {
+export function satisfies(ver, str) {
 	ver = format(ver, 3, 3, true);
 	str = str.replace(/(<=?\d+(\.\d+)*?)\.x/g, '$1.99999999').replace(/(>=?\d+(\.\d+)*?)\.x/g, '$1.0');
 	try {
@@ -63,15 +63,3 @@ function satisfies(ver, str) {
 		return range === '*' || semver.satisfies(ver, range) || (ver.indexOf('-') === -1 && semver.satisfies(ver + '-0', range));
 	});
 }
-
-export default {
-	format,
-	eq,
-	gte,
-	gt,
-	lte,
-	lt,
-	compare,
-	rcompare,
-	satisfies
-};

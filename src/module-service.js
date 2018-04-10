@@ -1,19 +1,19 @@
 import DetectEngine from 'appcd-detect';
 import gawk from 'gawk';
 import sortObject from 'sort-object-keys';
-import version from './version';
 
+import { compare } from './version';
 import { DataServiceDispatcher } from 'appcd-dispatcher';
 import { modules, TitaniumModule } from 'titaniumlib';
 
 /**
- * The Titanium SDK info service.
+ * Defines a service endpoint for listing Titanium modules.
  */
-export default class TitaniumInfoService extends DataServiceDispatcher {
+export default class ModuleService extends DataServiceDispatcher {
 	/**
 	 * Starts detecting Titanium SDKs and modules.
 	 *
-	 * @param {Config} cfg - An Appc Daemon config object.
+	 * @param {Object} cfg - An Appc Daemon config object.
 	 * @returns {Promise}
 	 * @access public
 	 */
@@ -58,7 +58,7 @@ export default class TitaniumInfoService extends DataServiceDispatcher {
 			for (const platform of Object.keys(modules)) {
 				modules[platform] = sortObject(modules[platform]);
 				for (const id of Object.keys(modules[platform])) {
-					modules[platform][id] = sortObject(modules[platform][id], version.compare);
+					modules[platform][id] = sortObject(modules[platform][id], compare);
 				}
 			}
 
