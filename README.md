@@ -2,8 +2,6 @@
 
 Titanium SDK services for the Appc Daemon.
 
-Report issues in [JIRA](https://jira.appcelerator.org/projects/DAEMON/issues).
-
 ## SDKs
 
 ### Listing SDK Install Locations
@@ -419,3 +417,11 @@ To listen for changes, pass in the `--subscribe` flag:
 ```sh
 $ appcd exec /titanium-sdk/latest/module/list/installed --subscribe
 ```
+
+## Legal
+
+This project is open source under the [Apache Public License v2][1] and is developed by
+[Axway, Inc](http://www.axway.com/) and the community. Please read the [`LICENSE`][1] file included
+in this distribution for more information.
+
+[1]: https://github.com/appcelerator/appcd-plugin-titanium-sdk/blob/master/LICENSE
