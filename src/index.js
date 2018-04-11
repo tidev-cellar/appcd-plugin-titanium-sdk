@@ -22,11 +22,7 @@ export async function activate(cfg) {
 	appcd.register('/build', buildSvc);
 
 	await moduleSvc.activate(cfg);
-	appcd.register([ '/module', '/module/list' ], (ctx, next) => {
-		ctx.path = '/module/list/installed';
-		return next();
-	});
-	appcd.register('/module/list/installed', moduleSvc);
+	appcd.register('/modules', moduleSvc);
 
 	await sdkSvc.activate(cfg);
 	appcd.register('/sdk', sdkSvc);
@@ -39,6 +35,6 @@ export async function activate(cfg) {
  */
 export async function deactivate() {
 	await buildSvc.deactivate();
-	await moduleSvc.deactivate();
+	await moduleSvc.deactivate2();
 	await sdkSvc.deactivate();
 }

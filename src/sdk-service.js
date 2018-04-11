@@ -1,7 +1,7 @@
 import appcdLogger from 'appcd-logger';
 import Dispatcher from 'appcd-dispatcher';
 import fs from 'fs-extra';
-import ListInstalled from './sdk-list-installed';
+import SDKListInstalledService from './sdk-list-installed-service';
 import path from 'path';
 import request from 'appcd-request';
 import Response, { AppcdError, codes } from 'appcd-response';
@@ -55,7 +55,7 @@ export default class SDKService extends Dispatcher {
 	async activate(cfg) {
 		this.config = cfg;
 
-		this.installed = new ListInstalled();
+		this.installed = new SDKListInstalledService();
 		await this.installed.activate(cfg);
 
 		this.register([ '/', '/list' ], (ctx, next) => {
@@ -473,7 +473,7 @@ export default class SDKService extends Dispatcher {
 	 */
 	getInstallPaths() {
 		const paths = sdk.locations[process.platform].map(p => expandPath(p));
-		const defaultPath = get(this.config, 'titanium.defaultInstallLocation');
+		const defaultPath = get(this.config, 'titanium.sdk.defaultInstallLocation');
 		if (defaultPath) {
 			paths.unshift(expandPath(defaultPath));
 		}

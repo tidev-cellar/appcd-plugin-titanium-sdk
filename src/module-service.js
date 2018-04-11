@@ -1,83 +1,59 @@
-import DetectEngine from 'appcd-detect';
-import gawk from 'gawk';
-import sortObject from 'sort-object-keys';
+import Dispatcher from 'appcd-dispatcher';
+import ModuleListInstalledService from './module-list-installed-service';
 
-import { compare } from './version';
-import { DataServiceDispatcher } from 'appcd-dispatcher';
-import { modules, TitaniumModule } from 'titaniumlib';
+import { expandPath } from 'appcd-path';
+import { get, unique } from 'appcd-util';
+import { modules } from 'titaniumlib';
 
 /**
  * Defines a service endpoint for listing Titanium modules.
  */
-export default class ModuleService extends DataServiceDispatcher {
+export default class ModuleService extends Dispatcher {
 	/**
-	 * Starts detecting Titanium SDKs and modules.
+	 * Registers all of the endpoints and initializes the installed modules detect engine.
 	 *
-	 * @param {Object} cfg - An Appc Daemon config object.
+	 * @param {Object} cfg - The Appc Daemon config object.
 	 * @returns {Promise}
 	 * @access public
 	 */
 	async activate(cfg) {
 		this.config = cfg;
-		this.data = gawk({});
 
-		this.detectEngine = new DetectEngine({
-			checkDir(dir) {
-				try {
-					return new TitaniumModule(dir);
-				} catch (e) {
-					// 'dir' is not a Titanium SDK
-				}
-			},
-			depth:               3,
-			multiple:            true,
-			name:                'titanium-sdk:modules',
-			paths:               modules.locations[process.platform],
-			recursive:           true,
-			recursiveWatchDepth: 0,
-			redetect:            true,
-			watch:               true
+		this.installed = new ModuleListInstalledService();
+		await this.installed.activate(cfg);
+
+		this.register([ '/', '/list' ], (ctx, next) => {
+			ctx.path = '/list/installed';
+			return next();
 		});
 
-		this.detectEngine.on('results', results => {
-			let modules = {};
+		this.register('/list/installed', this.installed);
 
-			// convert the list of modules into buckets by platform and version
-			for (const module of results) {
-				if (!modules[module.platform]) {
-					modules[module.platform] = {};
-				}
-				if (!modules[module.platform][module.moduleid]) {
-					modules[module.platform][module.moduleid] = {};
-				}
-				modules[module.platform][module.moduleid][module.version] = module;
-			}
-
-			// sort the platforms and versions
-			modules = sortObject(modules);
-			for (const platform of Object.keys(modules)) {
-				modules[platform] = sortObject(modules[platform]);
-				for (const id of Object.keys(modules[platform])) {
-					modules[platform][id] = sortObject(modules[platform][id], compare);
-				}
-			}
-
-			gawk.set(this.data, modules);
-		});
-
-		await this.detectEngine.start();
+		this.register('/list/locations', ctx => this.getInstallPaths());
 	}
 
 	/**
-	 * Stops the detect engine.
+	 * Shuts down the installed SDKs detect engine.
 	 *
 	 * @returns {Promise}
 	 * @access public
 	 */
 	async deactivate() {
-		if (this.detectEngine) {
-			await this.detectEngine.stop();
-			this.detectEngine = null;
+		await this.installed.deactivate();
+	}
+
+	/**
+	 * Returns a list of Titanium module installation locations.
+	 *
+	 * @returns {Array.<String>}
+	 * @access private
+	 */
+	getInstallPaths() {
+		const paths = modules.locations[process.platform].map(p => expandPath(p));
+		const defaultPath = get(this.config, 'titanium.modules.defaultInstallLocation');
+		if (defaultPath) {
+			paths.unshift(expandPath(defaultPath));
 		}
+		return unique(paths);
 	}
 }

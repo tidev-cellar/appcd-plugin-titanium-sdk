@@ -1,9 +1,19 @@
 module.exports = {
 	titanium: {
-		/**
-		 * The default Titanium SDK installation path.
-		 * @type {String}
-		 */
-		defaultInstallLocation: null
+		sdk: {
+			/**
+			 * The default Titanium SDK installation path.
+			 * @type {String}
+			 */
+			defaultInstallLocation: null
+		},
+
+		modules: {
+			/**
+			 * The default Titanium Modules installation path.
+			 * @type {String}
+			 */
+			defaultInstallLocation: null
+		}
 	}
 };

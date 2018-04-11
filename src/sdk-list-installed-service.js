@@ -8,7 +8,7 @@ import { sdk, TitaniumSDK } from 'titaniumlib';
 /**
  * Detects installed Titanium SDKs.
  */
-export default class ListInstalled extends DataServiceDispatcher {
+export default class SDKListInstalledService extends DataServiceDispatcher {
 	/**
 	 * Starts detecting Titanium SDKs.
 	 *
