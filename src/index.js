@@ -35,6 +35,6 @@ export async function activate(cfg) {
  */
 export async function deactivate() {
 	await buildSvc.deactivate();
-	await moduleSvc.deactivate2();
+	await moduleSvc.deactivate();
 	await sdkSvc.deactivate();
 }

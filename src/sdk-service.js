@@ -101,7 +101,7 @@ export default class SDKService extends Dispatcher {
 
 			const is64build = /64bit/.test(build_type);
 
-			if (os === 'osx' || (is64 && is64build) || (!is64 && !is64build)) {
+			if (os !== 'linux' || (is64 && is64build) || (!is64 && !is64build)) {
 				results[version] = {
 					version: version.replace(/\.GA.*$/, ''),
 					url
