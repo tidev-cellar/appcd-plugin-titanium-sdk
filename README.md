@@ -1,3 +1,5 @@
+:warning: THIS REPO HAS MOVED TO https://github.com/appcelerator/appc-daemon-plugins
+
 # appcd-plugin-titanium-sdk
 
 Titanium SDK services for the Appc Daemon.
